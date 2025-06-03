@@ -1,0 +1,51 @@
+{
+  "name": "newbackend",
+  "version": "1.0.0",
+  "description": "A Node.js + Express.js + Mongoose backend using TypeScript",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon",
+    "lint": "eslint ./src --ext .ts",
+    "test": "echo \"No test configured yet\" && exit 0"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "typescript",
+    "mongoose",
+    "backend"
+  ],
+  "author": "Hemang Dutt Mishra",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "mongoose": "^8.15.1",
+    "morgan": "^1.10.0",
+    "tsconfig-paths": "^4.2.0",
+    "zod": "^3.25.49"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^4.17.22",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.15.29",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "eslint": "^9.28.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.2.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1"
+  }
+}

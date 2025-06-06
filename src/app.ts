@@ -1,56 +1,31 @@
+import express, { Express } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import helmet from "helmet";
 import morgan from "morgan";
-import { ZodError } from "zod";
-import cookieParser from "cookie-parser";
-import { MongooseError } from "mongoose";
-import express, { Request, Response } from "express";
+import compression from "compression";
+import { config } from "./config";
+import routes from "./routes";
+import { errorHandler } from "./middlewares/errorHandler.middleware";
 
-// Load environment variables
-dotenv.config();
+const app: Express = express();
 
-// Routes
-import routes from "./routes/index";
-
-// Middlewares
-import errorHandler from "./middlewares/errorHandler.middlware";
-import limitRequests from "./middlewares/rateLimit.middleware";
-
-const app = express();
-
-// Global Middlewares
-app.use(
-  cors({
-    origin: process.env.PUBLIC_API_BASE_URL,
-    credentials: true,
-  })
-);
-app.use(morgan("dev"));
+// Middleware
 app.use(express.json());
-app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: config.clientUrl }));
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(compression());
 
-// Import authentication middleware
-// import { protect } from "./middlewares/auth.middleware";
-
-// Optional authentication middleware globally
-// This will attach the user to the request object if a valid token is provided
-// app.use(protect);
-
-// Root Route
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Ayush Bhadkhau GOD!");
+// Global Route
+app.get("/", (req, res) => {
+  res.send("🚀 Server is running");
 });
 
-// API Routes
+// Routes
 app.use("/api", routes);
 
-// Global Error Handler (should be after routes)
-app.use((err: Error | ZodError | MongooseError, _req: Request, res: Response) =>
-  errorHandler(err, res)
-);
-
-// Optional: Apply rate limiter globally (usually done before routes)
-app.use(limitRequests);
+// Error handling
+app.use(errorHandler);
 
 export default app;

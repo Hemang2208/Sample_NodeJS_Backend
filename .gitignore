@@ -3,4 +3,4 @@ build/
 coverage/
 dist/
 VSCode/
-# env/
+.env

@@ -1,21 +1,25 @@
-export class AppError extends Error {
-  public readonly statusCode: number;
-  public readonly code: string;
-  public readonly details?: unknown;
-  public readonly isOperational: boolean;
+export type ErrorData = {
+  message: string;
+  error: string;
+  details?: unknown;
+};
 
-  constructor(
-    message: string,
-    statusCode = 500,
-    code = 'INTERNAL_SERVER_ERROR',
-    details?: unknown
-  ) {
-    super(message);
-    this.statusCode = statusCode;
-    this.code = code;
-    this.details = details;
-    this.isOperational = true;
+export const createError = (
+  statusCode: number,
+  message: string,
+  error: string,
+  details?: unknown
+): ErrorData => ({
+  message,
+  error,
+  ...(details !== undefined && { details }),
+});
 
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
+export const isAppError = (error: unknown): error is ErrorData => {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    "error" in error
+  );
+};

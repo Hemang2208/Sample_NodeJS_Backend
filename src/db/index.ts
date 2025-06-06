@@ -13,7 +13,7 @@ if (!MONGODB_URI) {
 const connectDB = async (): Promise<void> => {
   try {
     const connection = await mongoose.connect(MONGODB_URI);
-    console.log(`✅ Connected to MongoDB at: ${connection.connection.host}`);
+    console.log(`🚀 Connected to MongoDB at: ${connection.connection.host}`);
   } catch (error: unknown) {
     if (error instanceof mongoose.Error) {
       console.error("❌ Mongoose Error:", error.message);

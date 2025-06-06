@@ -1,50 +1,70 @@
-import { Response } from 'express';
+import { TApiResponse } from "../types";
+import { Response } from "express";
 
+// Types
 type SuccessResponse<T> = {
-  status: 'success';
-  statusCode: number;
-  data: T;
+  success: true;
+  data?: T;
+  message?: string;
+  timestamp: string;
 };
 
 type ErrorResponse = {
-  status: 'error';
-  statusCode: number;
+  success: false;
   message: string;
-  code?: string;
+  error: string;
   details?: unknown;
+  timestamp: string;
 };
 
-export class ApiResponseBuilder {
-  static success<T>(res: Response, statusCode: number, data: T): Response {
-    const response: SuccessResponse<T> = {
-      status: 'success',
-      statusCode,
-      data,
-    };
-    return res.status(statusCode).json(response);
-  }
+// Response functions
+export const successResponse = <T>(
+  data?: T,
+  message?: string
+): SuccessResponse<T> => ({
+  success: true,
+  ...(data && { data }),
+  ...(message && { message }),
+  timestamp: new Date().toISOString(),
+});
 
-  static error(
-    res: Response,
-    {
-      message,
-      statusCode,
-      code,
-      details,
-    }: {
-      message: string;
-      statusCode: number;
-      code?: string;
-      details?: unknown;
-    }
-  ): Response {
-    const response: ErrorResponse = {
-      status: 'error',
-      statusCode,
-      message,
-    };
-    if (code) response.code = code;
-    if (details) response.details = details;
-    return res.status(statusCode).json(response);
-  }
-}
+export const errorResponse = (
+  message: string,
+  error: string,
+  details?: unknown
+): ErrorResponse => ({
+  success: false,
+  message,
+  error,
+  ...(details !== undefined && { details }),
+  timestamp: new Date().toISOString(),
+});
+
+// Express response helpers
+export const sendSuccess = <T>(
+  res: Response,
+  data?: T,
+  message?: string
+): Response => {
+  return res.json(successResponse(data, message));
+};
+
+export const sendError = (
+  res: Response,
+  message: string,
+  error: string,
+  details?: unknown
+): Response => {
+  return res.json(errorResponse(message, error, details));
+};
+
+export const createApiResponse = <T>(
+  success: boolean,
+  message: string,
+  data?: T
+): TApiResponse<T> => ({
+  success,
+  message,
+  ...(data && { data }),
+  timestamp: new Date().toISOString(),
+});
